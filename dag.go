@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
 	"sync"
 	"sync/atomic"
 )
@@ -36,7 +37,11 @@ func NewDag(nodes ...*node) (*DAG, error) {
 	}
 
 	for i, node := range nodes {
-		d.deps[i] = uint32(len(node.deps))
+		numDeps := len(node.deps)
+		if numDeps > math.MaxUint32 {
+			return nil, fmt.Errorf("node %s has too many deps (max %d)", node.name, math.MaxUint32)
+		}
+		d.deps[i] = uint32(numDeps)
 		for _, dep := range node.deps {
 			idx, ok := d.nodeMap[dep]
 			if !ok {
