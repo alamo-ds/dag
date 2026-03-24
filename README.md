@@ -14,7 +14,7 @@
 ## Installation
 
 ```bash
-go get github.com/alamo-ds/dag
+go get -u github.com/alamo-ds/dag@latest
 ```
 
 ## Usage
